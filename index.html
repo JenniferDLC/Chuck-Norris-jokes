@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@400;600;800&family=Roboto:wght@500;700&display=swap" rel="stylesheet">
+    <title>api chuckapi</title>
+   
+   <style>
+    
+    html{
+
+     box-sizing: border-box;
+     font-family: 'Anek Malayalam', sans-serif;
+    
+
+
+    }
+    header{
+     
+      width: 100%;
+
+
+    }
+
+    h1{
+      
+      font-family: 'Anek Malayalam', sans-serif;
+      font-size: 40px;
+      text-align: center;
+      transform:rotate(8deg);
+
+    }
+
+    .bam{
+
+     margin: 0 -150px ;
+     width: 120px;
+     height: 120px;
+     position: absolute;
+
+
+    }
+    .bam2{
+
+       margin: 100px 0 ;
+       width: 140px;
+       height: 140px;
+       position: absolute;
+
+
+    }
+    .chuck{
+      transform:rotate(-10deg);
+      
+    }
+
+    #categorias {
+
+     display: flex;
+     flex-direction: row;
+     flex-wrap: wrap;
+     background-color: coral;
+     border-style: double;
+     /*max-width: 800px;*/
+     margin: 10px 80px;
+     padding: 0 30px;
+     
+
+    }
+
+    #categorias h3{
+
+     margin: 0 5px;   
+
+   }
+
+   form{
+
+     display: flex;
+     margin: 0 30%;
+     flex-wrap: wrap;
+     align-content:space-around;  
+
+   }
+
+   input {
+
+    height: 30px;
+    margin: 5px 5px;
+    border-style: solid;
+    border-color:brown;
+    background-color:rgb(94, 179, 182);
+    border-radius: 5px;
+   
+   }
+
+   #entr{
+    
+    height: 25px;
+    border-color: black;
+    background-color: white;
+    border-radius: 0;
+
+
+   }
+
+   .broma{
+
+    background-color:gainsboro;
+    height: 30rem;
+    margin: 0 2%;
+
+
+   }
+   .broma p{
+
+     color: black;
+     font-size: 25px;
+     margin: 15px 15px;
+     padding: 20px 10px;
+     text-align: center;
+     
+
+    }
+
+     a{
+
+     color: blue;
+     font-size: 15px;
+     padding-left: 5%;
+           
+     
+       }
+   
+
+
+
+
+   footer{
+
+    background-color: black;
+    height: 2rem;
+    width: 100%;
+   /* margin: 0 10px; */
+
+   }
+
+  footer h5{
+
+    color:white;
+    text-align: center;
+    padding: 5px 0;
+
+   }
+
+   .next{
+
+    height: 40px;
+    width: 80px;
+    margin: 15px 45%;
+
+   }
+
+
+      
+
+    </style>
+
+</head>
+  <body>
+
+    <header class="header"></header>
+
+
+
+
+
+<form  id="joke-search">
+  <input type="text" name="entrada" placeholder="Categoria" id="entr" required>
+  <input type="submit"  value="Buscar">
+  <input type="button" value="random joke" class="random" >
+</form>
+
+
+<aside class="error"></aside>
+
+
+<nav id="categorias">
+
+</nav>
+
+<main>
+  <article class="broma">
+    <h2></h2>
+</article>
+
+<input type="button" class="next" value="Next">
+<article class="otro">
+    <h5></h5>
+</article>
+
+</main>
+
+
+<footer>
+<h5>Developed for Jennifer DLC</h5>
+
+</footer>
+
+ <script>
+
+ const d=document,
+ $header= d.querySelector(".header"),
+ $form=d.getElementById("joke-search"),
+ $categoria=d.getElementById("categorias"),
+ $loader = d.querySelector(".loader"),
+ error = d.querySelector(".error"),
+ $main = d.querySelector("main"),
+ $value= d.querySelector(".entrada"),
+ $broma=d.querySelector(".broma"),
+ $otro= d.querySelector(".otro"),
+ $random=d.querySelector(".random"),
+ $next=d.querySelector(".next");
+ categoria_guardada="";
+
+
+
+
+
+
+ ///////cargando categorias///////
+
+  chuckapi = "https://api.chucknorris.io/jokes/categories",
+  loadcategoria(chuckapi);
+ 
+
+
+  async function loadcategoria(url){
+  try{
+  
+   $template="",
+   $templatectg ="",
+  
+   res = await fetch(url),
+   json = await res.json();
+  
+  
+   console.log(res);
+  
+   $template +=`
+  
+     <h1>CHUCK NORRIS <h1>
+      <img src= "assets/bang.jpeg" alt="chuck Norris" class="bam">
+     <img src= "assets/chuck1.jpeg" alt="chuck Norris" class="chuck">
+     <img src= "assets/bang.jpeg" alt="chuck Norris" class="bam2">
+  `;
+  
+  
+   if(!res.ok) throw {status:res.status, statusText:res.statusText}
+  
+     for(let i=0; i < json.length; i++){
+  
+       console.log(json[i]);
+  
+    $templatectg += `
+     
+       <h3> ‣${json[i]}</h3>
+  
+  `
+
+  }
+  
+  
+  $header.innerHTML= $template;
+  $categoria.innerHTML= $templatectg;
+
+  
+  }catch(err){ 
+  
+  console.log(err);
+  let message = err.statusText || "Ocurrio un error";
+  $template += 
+  `
+  <figure>
+      
+      <figcaption>Error ${err.status}: ${message} </figcaption>
+      
+      
+      </figure>
+  
+  `
+  ;
+  
+  
+  }
+  }
+   
+ 
+ 
+  $form.addEventListener("submit", async e =>{
+   
+    e.preventDefault();
+    
+
+   try {
+
+    let ctgvalue = e.target.entrada.value.toLowerCase(), 
+    $joketemplate="",
+    $joketemplateotro="",
+    jokeapi=`https://api.chucknorris.io/jokes/random?category=${ctgvalue}`,
+    jokefetch= fetch(jokeapi), 
+    [jokeRes] = await Promise.all([jokefetch]),
+    jokeData= await jokeRes.json();
+
+    console.log(jokeRes, jokeData);
+    categoria_guardada= ctgvalue;
+
+  if(jokeData.error){
+
+    $joketemplate +=`
+    
+    
+    <h3> Error: ${jokeData.message}</h3>
+
+    
+    `;
+    
+
+//<img src="${jokeData.icon_url}"> </img>
+    }else{
+
+      $joketemplate +=`
+
+     <p>${jokeData.value}</p>
+    
+  
+    `;
+
+    $joketemplateotro +=`
+
+
+  <a href="${jokeData.url}">more joke of category ${ctgvalue}</a>
+
+
+`;
+
+
+    
+
+
+    }
+    
+   $broma.innerHTML= $joketemplate;
+   $otro.innerHTML= $joketemplateotro;
+    
+
+     
+   } catch(err){
+
+    console.log(err);
+     
+   }
+
+
+
+
+  });
+
+
+   ////////////boton random//////
+
+  $random.addEventListener("click" , async f =>{
+   
+   f.preventDefault();
+
+
+    console.log("presiono broma ramdom");
+
+    try {
+     
+      $joketemplate2=""; 
+     urlrandom="https://api.chucknorris.io/jokes/random",
+     randomfetch= fetch(urlrandom),
+     [randomres] =await Promise.all([randomfetch]),
+      randomData= await randomres.json();
+      
+     
+      console.log(randomres, randomData);
+      categoria_guardada= "random";
+
+      $joketemplate2 +=`
+    
+     <p>${randomData.value}</p>
+
+    
+
+    
+    `;
+    
+    $broma.innerHTML= $joketemplate2;
+
+    }
+  
+    
+    catch (error) {
+
+      console.log(error);
+      
+    }
+
+
+
+    });
+
+
+  /////////boton next//////
+
+  $next.addEventListener("click" , async g =>{
+
+    try {
+
+console.log(categoria_guardada);
+jokeapi=``;
+if(categoria_guardada=="random"){
+
+jokeapi=`https://api.chucknorris.io/jokes/random`;
+
+}
+else{
+jokeapi=`https://api.chucknorris.io/jokes/random?category=${categoria_guardada}`;
+
+};
+
+$joketemplate="",
+$joketemplateotro ="",
+//jokeapi=`https://api.chucknorris.io/jokes/random?category=${categoria_guardada}`,
+jokefetch= fetch(jokeapi), 
+[jokeRes] = await Promise.all([jokefetch]),
+jokeData= await jokeRes.json();
+
+console.log(jokeRes, jokeData);
+
+if(jokeData.error){
+
+$joketemplate +=`
+
+
+<h3> Error: ${jokeData.message}</h3>
+
+
+`;
+
+//<img src="${jokeData.icon_url}"> </img>
+}else{
+
+  $joketemplate +=`
+
+ <p>${jokeData.value}</p>
+
+ 
+
+
+`;
+
+$joketemplateotro +=`
+
+
+<a href="${jokeData.url}">more joke of category ${categoria_guardada}</a>
+
+
+`;
+
+
+
+}
+
+$broma.innerHTML= $joketemplate;
+$otro.innerHTML= $joketemplateotro;
+
+ 
+} catch(err){
+
+console.log(err);
+
+
+ 
+}
+   
+
+
+  });
+
+ </script>   
+    
+</body>
+</html>
